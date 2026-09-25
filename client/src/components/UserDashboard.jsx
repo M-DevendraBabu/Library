@@ -41,26 +41,55 @@ const UserDashboard = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === "student") parsed.role = "user";
+        return parsed;
+      }
+    } catch (e) {}
+    return {
+      name: "Student",
+      email: "student@library.edu",
+      studentId: "STU0001",
+      avatarColor: "#4f46e5",
+      role: "user",
+    };
+  });
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    return !!(token || user || isLoggedIn === "true");
+  });
 
   // Add authentication check at the beginning
   useEffect(() => {
     const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      const savedUser = localStorage.getItem("user");
       const isLoggedIn = localStorage.getItem("isLoggedIn");
       const userType = localStorage.getItem("userType");
       const isAdmin = localStorage.getItem("isAdmin");
 
+      const hasAuth = !!(token || savedUser || isLoggedIn === "true");
+
       // If not logged in, redirect to login
-      if (!isLoggedIn || isLoggedIn !== "true") {
-        navigate("/login");
+      if (!hasAuth) {
+        setIsAuthenticated(false);
+        navigate("/login", { replace: true });
         return;
       }
 
+      // Ensure flags are synced in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+
       // If admin tries to access user dashboard, redirect to admin dashboard
       if (isAdmin === "true" || userType === "admin") {
-        navigate("/admin-dashboard");
+        navigate("/admin-dashboard", { replace: true });
         return;
       }
 
@@ -84,35 +113,17 @@ const UserDashboard = () => {
       const tab = tabMap[path] || "dashboard";
       setActiveTab(tab);
 
-      // Set user data
-      const savedUser = localStorage.getItem("user");
+      // Set user data if found in localStorage
       if (savedUser) {
         try {
-          const userData = JSON.parse(savedUser);
-          // Ensure role is "user" for students
-          if (userData.role === "student") {
-            userData.role = "user";
+          const parsed = JSON.parse(savedUser);
+          if (parsed.role === "student") {
+            parsed.role = "user";
           }
-          setUserData(userData);
+          setUserData(parsed);
         } catch (error) {
-          // If parsing fails, set default user data
-          setUserData({
-            name: "John Student",
-            email: "student@college.edu",
-            studentId: "STU2024001",
-            avatarColor: "#8b5cf6",
-            role: "user",
-          });
+          // keep existing state
         }
-      } else {
-        // Set default user data if not found
-        setUserData({
-          name: "John Student",
-          email: "student@college.edu",
-          studentId: "STU2024001",
-          avatarColor: "#8b5cf6",
-          role: "user",
-        });
       }
     };
 
@@ -120,11 +131,12 @@ const UserDashboard = () => {
   }, [navigate, location]);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userType");
     localStorage.removeItem("user");
     localStorage.removeItem("isAdmin");
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   const navItems = [

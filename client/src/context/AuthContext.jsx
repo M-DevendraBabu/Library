@@ -17,10 +17,18 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const res = await authAPI.getMe();
-        setUser(res.data.user);
+        const u = res.data.user;
+        setUser(u);
+        localStorage.setItem("user", JSON.stringify(u));
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userType", u.role || "user");
+        localStorage.setItem("isAdmin", u.role === "admin" ? "true" : "false");
       } catch {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("isAdmin");
       } finally {
         setLoading(false);
       }
@@ -33,6 +41,9 @@ export const AuthProvider = ({ children }) => {
     const { token, user } = res.data;
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("userType", user.role || "user");
+    localStorage.setItem("isAdmin", user.role === "admin" ? "true" : "false");
     setUser(user);
     return user;
   };
@@ -42,6 +53,9 @@ export const AuthProvider = ({ children }) => {
     const { token, user } = res.data;
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("userType", user.role || "user");
+    localStorage.setItem("isAdmin", user.role === "admin" ? "true" : "false");
     setUser(user);
     return user;
   };

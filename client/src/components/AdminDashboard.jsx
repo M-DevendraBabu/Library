@@ -49,27 +49,32 @@ const AdminDashboard = () => {
 
   // Check authentication on component mount
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     const userType = localStorage.getItem("userType");
 
-    if (!isLoggedIn) {
-      navigate("/login");
+    const hasAuth = !!(token || savedUser || isLoggedIn === "true");
+
+    if (!hasAuth) {
+      navigate("/login", { replace: true });
       return;
     }
 
-    if (userType !== "admin") {
-      // If user is not admin, redirect them to user dashboard
-      alert("You don't have admin privileges!");
-      navigate("/dashboard");
+    localStorage.setItem("isLoggedIn", "true");
+
+    if (userType && userType !== "admin") {
+      navigate("/dashboard", { replace: true });
     }
   }, [navigate]);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userType");
     localStorage.removeItem("user");
     localStorage.removeItem("isAdmin");
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   const confirmLogout = () => {
