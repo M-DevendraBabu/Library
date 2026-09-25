@@ -189,38 +189,105 @@ const Home = () => {
             }}
           >
             A unified digital library platform for students and administrators.
-            Borrow books, track inventory, and manage accounts seamlessly.
+            Borrow books, track inventory, and manage accounts seamlessly in one powerful system.
           </motion.p>
         </div>
       </section>
 
       {/* Features */}
-      <section className="features-section" style={{ padding: "4rem 0", background: "var(--bg-color)" }}>
+      <section className="features-section">
         <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <h2 style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
+              Why Choose LibraFlow?
+            </h2>
+            <p style={{ color: "#64748B" }}>
+              Powerful features for everyone.
+            </p>
+          </div>
+
           <div className="grid-3">
-            <div className="feature-card" style={{ background: "white", padding: "2rem", borderRadius: "1rem", boxShadow: "var(--shadow-sm)", textAlign: "center" }}>
-              <div style={{ display: "inline-flex", padding: "1rem", borderRadius: "50%", background: "rgba(79, 70, 229, 0.1)", color: "var(--primary)", marginBottom: "1rem" }}>
+            <div className="feature-card">
+              <div className="feature-card-decoration"></div>
+              <div className="feature-icon-box">
                 <UserCheck size={32} />
               </div>
-              <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>User Management</h3>
-              <p style={{ color: "var(--text-muted)" }}>Manage students and staff easily.</p>
+              <h3>User Management</h3>
+              <p>
+                Manage students and staff with ease. Track user activity and streamline onboarding with intuitive controls.
+              </p>
+              <span className="feature-badge">Easy Setup</span>
             </div>
 
-            <div className="feature-card" style={{ background: "white", padding: "2rem", borderRadius: "1rem", boxShadow: "var(--shadow-sm)", textAlign: "center" }}>
-              <div style={{ display: "inline-flex", padding: "1rem", borderRadius: "50%", background: "rgba(14, 165, 233, 0.1)", color: "#0ea5e9", marginBottom: "1rem" }}>
+            <div className="feature-card">
+              <div className="feature-card-decoration"></div>
+              <div className="feature-icon-box">
                 <Search size={32} />
               </div>
-              <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>Digital Catalog</h3>
-              <p style={{ color: "var(--text-muted)" }}>Search books in real time.</p>
+              <h3>Digital Catalog</h3>
+              <p>
+                Search and manage books in real time. Advanced filtering and instant availability checks at your fingertips.
+              </p>
+              <span className="feature-badge">Real-time Search</span>
             </div>
 
-            <div className="feature-card" style={{ background: "white", padding: "2rem", borderRadius: "1rem", boxShadow: "var(--shadow-sm)", textAlign: "center" }}>
-              <div style={{ display: "inline-flex", padding: "1rem", borderRadius: "50%", background: "rgba(16, 185, 129, 0.1)", color: "#10b981", marginBottom: "1rem" }}>
+            <div className="feature-card">
+              <div className="feature-card-decoration"></div>
+              <div className="feature-icon-box">
                 <Shield size={32} />
               </div>
-              <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>Secure Access</h3>
-              <p style={{ color: "var(--text-muted)" }}>Role-based secure access.</p>
+              <h3>Secure Access</h3>
+              <p>
+                Role-based authentication ensures data security. Protect sensitive information with granular permissions.
+              </p>
+              <span className="feature-badge">Enterprise Security</span>
             </div>
+          </div>
+
+          {/* CTA Banner */}
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4rem",
+              padding: "3rem",
+              background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
+              borderRadius: "var(--radius-xl)",
+              border: "1px solid rgba(0, 0, 0, 0.05)",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1.875rem",
+                fontWeight: "bold",
+                marginBottom: "1rem",
+              }}
+            >
+              Ready to Transform Your Library?
+            </h3>
+            <p
+              style={{
+                color: "#64748B",
+                fontSize: "1.125rem",
+                maxWidth: "600px",
+                margin: "0 auto 2rem",
+              }}
+            >
+              Join hundreds of institutions already using LibraFlow to manage their libraries efficiently.
+            </p>
+            <Link
+              to="/register"
+              className="btn btn-primary btn-tilt"
+              style={{
+                fontSize: "1.125rem",
+                padding: "0.875rem 2.5rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                textDecoration: "none",
+              }}
+            >
+              Start Free Trial <ArrowRight size={20} />
+            </Link>
           </div>
         </div>
       </section>
