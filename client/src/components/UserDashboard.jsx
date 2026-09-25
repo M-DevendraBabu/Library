@@ -1571,39 +1571,37 @@ const UserDashboard = () => {
 
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             {/* Notification Bell with Indicator */}
-            <motion.aside
-              className={`sidebar ${mobileMenuOpen ? "open" : ""}`}
-              initial={{ x: -300 }}
-              animate={{ x: 0 }}
-              transition={{ type: "spring", stiffness: 100 }}
+            <div
               style={{
-                width: "280px",
-                background: "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
-                padding: "2rem 1.5rem",
-                color: "white",
-                position: "sticky",
-                top: 0,
-                height: "100vh",
-                overflowY: "auto",
-                zIndex: 100,
-                boxShadow: "10px 0 30px rgba(0,0,0,0.1)",
+                position: "relative",
+                cursor: "pointer",
+                padding: "0.5rem",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            ></motion.aside>
-
-            <Bell size={20} color="#64748b" />
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              style={{
-                position: "absolute",
-                top: "8px",
-                right: "8px",
-                width: "8px",
-                height: "8px",
-                background: "#ef4444",
-                borderRadius: "50%",
+              onClick={() => {
+                setActiveTab("notifications");
+                navigate("/notifications");
               }}
-            />
+              title="Notifications"
+            >
+              <Bell size={20} color="#64748b" />
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{
+                  position: "absolute",
+                  top: "4px",
+                  right: "4px",
+                  width: "8px",
+                  height: "8px",
+                  background: "#ef4444",
+                  borderRadius: "50%",
+                }}
+              />
+            </div>
 
             {/* User Avatar */}
             <motion.div
