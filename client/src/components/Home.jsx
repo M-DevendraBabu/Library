@@ -6,62 +6,38 @@ import {
   Shield,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import libraryBg from "../assets/library-bg.jpg";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
-
-  // Auth check on load
-  useEffect(() => {
-    const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const adminFlag = localStorage.getItem("isAdmin") === "true" || user.role === "admin";
-
-    if (token && token !== "undefined" && token !== "null") {
-      setIsAuthenticated(true);
-      setIsAdmin(adminFlag);
-    } else {
-      setIsAuthenticated(false);
-      setIsAdmin(false);
-    }
-  }, []);
-
-  // Clear auth properly
-  const clearAuth = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("isAdmin");
-    localStorage.removeItem("user");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userType");
-
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userRole");
-    sessionStorage.removeItem("isAdmin");
-  };
 
   const handleLoginClick = (e) => {
     e.preventDefault();
-    clearAuth();
-    setIsAuthenticated(false);
-    navigate("/login");
+    if (isAuthenticated) {
+      navigate(isAdmin ? "/admin-dashboard" : "/dashboard");
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleRegisterClick = (e) => {
     e.preventDefault();
-    clearAuth();
-    setIsAuthenticated(false);
-    navigate("/register");
+    if (isAuthenticated) {
+      navigate(isAdmin ? "/admin-dashboard" : "/dashboard");
+    } else {
+      navigate("/register");
+    }
   };
 
-  const handleLogout = () => {
-    clearAuth();
-    setIsAuthenticated(false);
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (e) {
+      localStorage.clear();
+    }
+    navigate("/", { replace: true });
   };
 
   return (

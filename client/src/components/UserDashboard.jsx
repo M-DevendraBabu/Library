@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   LayoutDashboard,
   Search,
@@ -39,6 +40,7 @@ import {
 const UserDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userData, setUserData] = useState(() => {
@@ -130,12 +132,12 @@ const UserDashboard = () => {
     checkAuth();
   }, [navigate, location]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userType");
-    localStorage.removeItem("user");
-    localStorage.removeItem("isAdmin");
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (e) {
+      localStorage.clear();
+    }
     navigate("/login", { replace: true });
   };
 
@@ -1259,31 +1261,9 @@ const UserDashboard = () => {
     </div>
   );
 
-  // Render loading state if not authenticated
+  // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-          background: "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)",
-        }}
-      >
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          style={{
-            width: "50px",
-            height: "50px",
-            border: "4px solid #e2e8f0",
-            borderTop: "4px solid #4f46e5",
-            borderRadius: "50%",
-          }}
-        />
-      </div>
-    );
+    return <Navigate to="/login" replace />;
   }
 
   return (

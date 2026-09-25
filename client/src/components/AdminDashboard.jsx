@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   BarChart,
   Bar,
@@ -18,6 +19,7 @@ import {
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [searchTerm, setSearchTerm] = useState("");
   const [actionMessage, setActionMessage] = useState("");
@@ -68,12 +70,12 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userType");
-    localStorage.removeItem("user");
-    localStorage.removeItem("isAdmin");
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (e) {
+      localStorage.clear();
+    }
     navigate("/login", { replace: true });
   };
 
